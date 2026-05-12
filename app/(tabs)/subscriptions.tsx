@@ -1,1 +1,1 @@
-export default function Subsriptions() {}
+export default function Subscriptions() {}
