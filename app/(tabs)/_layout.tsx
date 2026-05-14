@@ -1,13 +1,67 @@
+import { tabs } from "@/assets/constants/data";
+import { colors, components } from "@/assets/constants/theme";
+import clsx from "clsx";
 import { Tabs } from "expo-router";
 
-const Tablayout = () => (
-  <Tabs screenOptions={{ headerShown: false }}>
-    <Tabs.Screen name="index" options={{ title: "Home" }} />
-    <Tabs.Screen name="subscriptions" options={{ title: "Subscriptions" }} />
-    <Tabs.Screen name="insights" options={{ title: "Insights" }} />
-    <Tabs.Screen name="settings" options={{ title: "Settings" }} />
-    <Tabs.Screen name="(subscriptions)/[id]" options={{ href: null }} />
-  </Tabs>
-);
+import { Image, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+const tabBar = components.tabBar;
+
+const TabIcon = ({ focused, icon }: TabIconProps) => {
+  return (
+    <View className="tabs-icon">
+      <View className={clsx("tabs-pill", focused && "tabs-active")}>
+        <Image
+          source={icon}
+          resizeMode="contain"
+          className="tabs-glyph"
+          style={{ width: tabBar.iconFrame, height: tabBar.iconFrame }}
+        />
+      </View>
+    </View>
+  );
+};
+
+const Tablayout = () => {
+  const inset = useSafeAreaInsets();
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: Math.max(inset.bottom, tabBar.horizontalInset),
+          height: tabBar.height,
+          marginHorizontal: tabBar.horizontalInset,
+          borderRadius: tabBar.radius,
+          backgroundColor: colors.primary,
+          borderWidth: 0,
+          elevation: 0,
+        },
+        tabBarItemStyle: {
+          paddingVertical: tabBar.height / 2 - tabBar.iconFrame / 1.6,
+        },
+        tabBarIconStyle: {
+          width: tabBar.iconFrame,
+          height: tabBar.iconFrame,
+          alignItems: "center",
+        },
+      }}>
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon focused={focused} icon={tab.icons} />
+            ),
+          }}
+        />
+      ))}
+    </Tabs>
+  );
+};
 export default Tablayout;
