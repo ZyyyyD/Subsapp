@@ -63,7 +63,7 @@ export default function SubscriptionCard({
                   className="sub-value"
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  {paymentMethod?.trim()}
+                  {paymentMethod?.trim() || "N/A"}
                 </Text>
               </View>
             </View>
